@@ -1,0 +1,27 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["interactiveTransactions"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model transaction {
+      id           String @unique //ID is txHash
+      tx_id        String?
+      blockHash    String?
+      vout_model  vout[]
+}
+
+model vout {
+    id                 String  @unique
+    type               String?
+    hex                String?
+    decoded_hex        String?
+    asm                String?
+    desc               String?
+    tx                 String?
+    transaction_model  transaction? @relation(fields: [tx], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
